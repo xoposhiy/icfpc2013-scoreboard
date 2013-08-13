@@ -1,0 +1,36 @@
+﻿@model ScoreboardApp.Models.SubmitionModel
+
+@using (Html.BeginForm("Post", "Home", FormMethod.Post))
+{
+    Html.ValidationSummary(true);
+
+        <label class="control-label">Your AuthKey or myproblems JSON:</label>
+    <div>
+        @Html.ValidationMessageFor(s => s.JsonOrAuthKey)
+    </div>
+    @Html.TextAreaFor(s => s.JsonOrAuthKey, new { @class = "input-xxlarge", placeholder = "to visualize your problems and count the score" })
+
+    <label class="control-label">Team name:</label>
+    <div>
+        @Html.ValidationMessageFor(s => s.TeamName)
+    </div>
+    @Html.TextBoxFor(s => s.TeamName, new { @class = "input-xxlarge", placeholder = "for the scoreboard" })
+
+    <label class="control-label">Link:</label>
+    <div>
+        @Html.ValidationMessageFor(s => s.Link)
+    </div>
+    @Html.TextBoxFor(s => s.Link, new { @class = "input-xxlarge", placeholder = "to your sources repo or post mortem writeup or something else" })
+        
+    <div>
+        <button class="btn btn-large btn-primary" type="submit">Visualize your problems!</button>
+    </div>
+        
+    
+}
+<p>
+    AuthKey posted here would not be published or misused. I swear! :-)<br />
+    If you do not trust me, myproblems JSON can be retrieved by yourself via this link: <code>http://icfpc2013.cloudapp.net/myproblems?auth=<b>[YourSecret]</b>vpsH1H</code>
+</p>
+
+
