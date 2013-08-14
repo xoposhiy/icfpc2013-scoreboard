@@ -65,7 +65,7 @@ namespace ScoreboardApp.Controllers
 					var json = submition.JsonOrAuthKey;
 					problems = js.Deserialize<List<MyProblemJson>>(json);
 					shortId = StoreProblems(problems, null);
-					UpdateTeams(shortId, new TeamStatus { id = shortId, anonymous = true, contestScore = problems.Count(p => p.solved == true) });
+					UpdateTeams(shortId, new TeamStatus { id = shortId, anonymous = true, teamName = submition.TeamName, link = submition.Link, contestScore = problems.Count(p => p.solved == true) });
 				}
 				return RedirectToAction("Index", "Home", new { id = shortId });
 			}
