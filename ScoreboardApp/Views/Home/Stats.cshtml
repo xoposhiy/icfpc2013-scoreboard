@@ -10,46 +10,21 @@
 @Html.Partial("ContestInfo")
 
 <h2>Scoreboard</h2>
-<div class="row">
-    <div class="span9">
-        <table class="table table-bordered table-condensed">
-            <tr>
-                <th>#</th>
-                <th>Score</th>
-                <th>Team Name</th>
-                <th>Id</th>
-                <th>Link</th>
-            </tr>
-            @{ 
-                int i = 1;
-                var scores = new[] { 1400, 1250, 1100, 904, 701, 568, 428, 291, 206, 116, 38 };
-                var places = new[] { 11, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275 };
-                var curPlace = 0;
-            }
-            @foreach (var item in Model)
-            {
-                if (item.contestScore <= scores[curPlace])
-                {
-                <tr>
-                    <td colspan="5" class="muted scoreboard-official">@places[curPlace++]th place in official scoreboard</td>
-                </tr>
-                }
-                <tr>
-                    <td>@(i++)</td>
-                    <td>@Html.ActionLink(item.contestScore.ToString(), "Index", new { id = item.GetShortId() })</td>
-                    <td>@(item.teamName)</td>
-                    <td>@(item.anonymous ? "" : item.easyChairId.ToString())</td>
-                    <td>
-                        @if (item.link != null)
-                        {
-                            <a href="@item.link">@item.link</a>
-                        }
-                    </td>
-                </tr>
-            }
-        </table>
+
+<ul class="nav nav-tabs" id="tabs">
+    <li><a href="#main" data-toggle="tab">Main division</a></li>
+    <li><a href="#lightning" data-toggle="tab">Lightning division</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="main">
+        @Html.Partial("Scoreboard", ScoreboardModel.ContestScore(Model))
+    </div>
+    <div class="tab-pane" id="lightning">
+        @Html.Partial("Scoreboard", ScoreboardModel.LightningScore(Model))
     </div>
 </div>
+
 
 <h2>What else can you do here?</h2>
 <p>
@@ -59,3 +34,16 @@
 </p>
 
 @Html.Partial("SubmitionForm", new SubmitionModel())
+
+@section scripts{
+    <script>
+        $('#tabs a').click(function(e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+        var tab = "main";
+        if (window.location.hash == "#lightning") tab = "lightning";
+        $("#tabs a[href='#" + tab + "']").tab("show");
+
+    </script>
+}

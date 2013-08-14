@@ -1,0 +1,40 @@
+﻿@model ScoreboardApp.Models.ScoreboardModel
+
+<div class="row">
+    <div class="span9">
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <th>#</th>
+                <th>Score</th>
+                <th>Team Name</th>
+                <th>Id</th>
+                <th>Link</th>
+            </tr>
+            @{ 
+                int i = 1;
+                var curPlace = 0;
+            }
+            @foreach (var item in Model.Teams.OrderByDescending(Model.getScore).Where(t => Model.getScore(t) > 0))
+            {
+                if (Model.getScore(item) < Model.scores[curPlace])
+                {
+                <tr>
+                    <td colspan="5" class="muted scoreboard-official">@Model.places[curPlace++]th place in the official scoreboard</td>
+                </tr>
+                }
+                <tr>
+                    <td>@(i++)</td>
+                    <td>@Html.ActionLink(Model.getScore(item).ToString(), "Index", new { id = item.GetShortId() })</td>
+                    <td>@(item.teamName)</td>
+                    <td>@(item.anonymous ? "" : item.easyChairId.ToString())</td>
+                    <td>
+                        @if (item.link != null)
+                        {
+                            <a href="@item.link">@item.link</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
