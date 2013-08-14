@@ -11,10 +11,11 @@
                      (operation, group) =>
                      {
                          var g = @group.ToList();
+                         var count = g.Count(p => p.problem.solved.HasValue);
                          return new
                              {
                                  operation,
-                                 failed = 100 * g.Count(p => p.problem.solved == false) / g.Count
+                                 failed = 100 * g.Count(p => p.problem.solved == false) / Math.Max(1, count)
                              };
                      });
     }
@@ -27,8 +28,14 @@
         <tr>
             <td>@o.operation</td>
             <td>@(o.failed)%</td>
-            <td class="F" colspan="@(o.failed/5)">&nbsp;</td>
-            <td class="S" colspan="@(20 - o.failed/5)">&nbsp;</td>
+            @if (o.failed/5 != 0)
+            {
+                <td class="F" colspan="@(o.failed/5)">&nbsp;</td>
+            }
+            @if (20 - o.failed/5 != 0)
+            {
+                <td class="S" colspan="@(20 - o.failed/5)">&nbsp;</td>
+            }
         </tr>
     }
     <tr>
