@@ -1,0 +1,21 @@
+﻿@using System.Linq
+@using ScoreboardApp.Api
+@model ScoreboardApp.Models.TeamViewModel
+
+
+<div class="row">
+    <div class="span6">
+        <h3>Fail rate by operations</h3>
+        <p>How many problems containing the operation were failed by the team.</p>
+    </div>
+</div>
+<div class="row">
+    <div class="span3">
+        <h5>all problems</h5>
+        @Html.Partial("OperationsStat", Model.Problems)
+    </div>
+    <div class="span3 offset1">
+        <h5>all except bonus</h5>
+        @Html.Partial("OperationsStat", Model.Problems.Where(p => !p.IsBonus))
+    </div>
+</div>

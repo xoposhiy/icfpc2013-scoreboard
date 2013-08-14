@@ -247,6 +247,10 @@
     <Content Include="Views\Home\ContestInfo.cshtml" />
     <Content Include="Views\Home\SubmitionForm.cshtml" />
     <Content Include="Views\Home\Scoreboard.cshtml" />
+    <Content Include="Views\Home\TeamStatusSheet.cshtml" />
+    <Content Include="Views\Home\ProblemsChart.cshtml" />
+    <Content Include="Views\Home\OperationsStats.cshtml" />
+    <Content Include="Views\Home\OperationsStat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

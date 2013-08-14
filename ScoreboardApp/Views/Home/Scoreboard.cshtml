@@ -1,7 +1,7 @@
 ﻿@model ScoreboardApp.Models.ScoreboardModel
 
 <div class="row">
-    <div class="span9">
+    <div class="span12">
         <table class="table table-bordered table-condensed">
             <tr>
                 <th>#</th>
@@ -24,7 +24,7 @@
                 }
                 <tr>
                     <td>@(i++)</td>
-                    <td>@Html.ActionLink(Model.getScore(item).ToString(), "Index", new { id = item.GetShortId() })</td>
+                    <td>@Html.ActionLink(Model.getScore(item).ToString(), "Index", "Home", null, null, "info", new { id = item.GetShortId() }, null)</td>
                     <td>@(item.teamName)</td>
                     <td>@(item.anonymous ? "" : item.easyChairId.ToString())</td>
                     <td>

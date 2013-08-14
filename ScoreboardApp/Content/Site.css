@@ -2,12 +2,15 @@
 .visualization{margin-bottom: 30px;}
 h1 {margin-top: 50px; margin-bottom: 30px;}
 h2 {margin-top: 30px;}
-h3 {margin-left: 20px; text-align:center;}
+h4 {margin-left: 20px; text-align:center;}
 .task-type-group {float: left; margin-left:10px;}
-.S, .F, .N, .A {width:2px; font-size:0.8em;}
-.S { font-size:0.1em; background-color: green; }
-.F { font-size:0.1em; background-color: red; }
-.N { font-size:0.1em; background-color: yellow; }
-.A { font-size:0.1em; background-color: lightgrey; }
+.S, .F, .N, .A , .Size, .cell {font-size:0.8em; line-height: 14px;}
+.cell {width:2px;}
+.cell-small {width:1px;}
+.S { background-color: green; }
+.F { background-color: red; }
+.N { background-color: yellow; }
+.A { background-color: lightgrey; }
 .subtotal{text-align:center}
 td.scoreboard-official {text-align: center;}
+.operations-table tr td {width: 10px;}

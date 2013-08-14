@@ -10,102 +10,21 @@
 
 @if (Model != null)
 {
-    <div class="clearfix visualization">
+    <div id="info">
         <h2>Team @(Model.Team.teamName ?? Model.TeamNumber)</h2>
-        @if (!Model.Team.anonymous)
-        {
-            <div class="row">
-                <div class="span9">
-                    <table class="table table-bordered table-condensed span2">
-                        <tr>
-                            <th>Score</th>
-                            <th>@Model.Team.contestScore</th>
-                        </tr>
-                        <tr>
-                            <td>Lightning Score</td>
-                            <td>@Model.Team.lightningScore</td>
-                        </tr>
-                        <tr>
-                            <td>Training Score</td>
-                            <td>@Model.Team.trainingScore</td>
-                        </tr>
-                        <tr>
-                            <td>CPU time</td>
-                            <td>@Model.Team.cpuTotalTime</td>
-                        </tr>
-                        <tr>
-                            <td># of Requests</td>
-                            <td>@Model.Team.numRequests</td>
-                        </tr>
-                        <tr>
-                            <td>Mistmatches</td>
-                            <td>@Model.Team.mismatches</td>
-                        </tr>
-                        @if (Model.Team.link != null)
-                        {
-                            <tr>
-                                <td>Details</td>
-                                <td><a href="@Model.Team.link">@Model.Team.link</a></td>
-                            </tr>
-                        }
-                    </table>
-                </div>
-            </div>
-        }
-        <div>
+        <div class="row">
+            @Html.Partial("TeamStatusSheet", Model)
         </div>
-        @{
-        var ps = Model.Problems
-                      .GroupBy(t => t.Type).Select(g => new
-                          {
-                              type = g.Key,
-                              cells = g.GroupBy(t => t.size)
-                                       .Select(gg => new { type = g.Key, size = gg.Key, total = gg.Count(), solved = gg.Count(t => t.solved ?? false), failed = gg.Count(t => !(t.solved ?? true)) })
-                          });
-        }
-        @foreach (var group in ps.OrderBy(g => g.type))
-        {
-            <div class="task-type-group">
-                <h3>@group.type.Trim()</h3>
-                <table class="chart">
-                    @{
-            var width = @group.cells.Max(c => c.total);
-            var minSize = @group.cells.Min(c => c.size);
-            var maxSize = @group.cells.Max(c => c.size);
-                    }
-                    @for (int i = 3; i < minSize; i++)
-                    {
-                        <tr>
-                            <td>@i</td>
-                            <td class="A" colspan="@width">&nbsp;</td>
-                        </tr>
-                    }
-                    @for (int size = minSize; size <= maxSize; size++)
-                    {
-                        var cell = group.cells.FirstOrDefault(c => c.size == size);
-                        <tr>
-                            <td>@size</td>
-                            @for (int i = 0; i < width; i++)
-                            {
-                                var c = cell != null
-                                            ? (i < cell.solved ? "S" : (i < cell.solved + cell.failed ? "F" : (i < cell.total) ? "N" : "A"))
-                                            : "A";
-                                <td class="@c">&nbsp;</td>
-                            }
-                        </tr>
-
-                    }
-                </table>
-                <div class="subtotal">@group.cells.Sum(c => c.solved) solved</div>
+        <div class="row">
+            @Html.Partial("ProblemsChart", Model)
+        </div>
+        @Html.Partial("OperationsStats", Model)
+        <div class="row">
+            <div class="span12">
+                @Html.ActionLink("Other teams scores", "Stats")
             </div>
-        }
+        </div>
     </div>
-    <p>
-        All problems can be divided in 4 classes: simple, with fold operation, with tfold operation (a bit simpler than fold), and bonus problems. 
-            All problems grouped by problem class, expression size, and status — solved (green), failed (red) and not touched (yellow).
-            Here you can analyse the quality of your solver on different expressions.
-    </p>
-    @Html.ActionLink("Other teams scores", "Stats")
 }
 
 <h2>What can you do here?</h2>

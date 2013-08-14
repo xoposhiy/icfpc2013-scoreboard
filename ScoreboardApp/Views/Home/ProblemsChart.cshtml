@@ -1,0 +1,74 @@
+﻿@model ScoreboardApp.Models.TeamViewModel
+
+@{
+    var ps = Model.Problems
+                  .GroupBy(t => t.Type).Select(g => new
+                      {
+                          type = g.Key,
+                          cells = g.GroupBy(t => t.size)
+                                   .Select(gg => new { type = g.Key, size = gg.Key, total = gg.Count(), solved = gg.Count(t => t.solved ?? false), failed = gg.Count(t => !(t.solved ?? true)) })
+                      });
+}
+<div class="span12">
+    <h3>Fail rate by problem type and size</h3>
+    <div class="clearfix visualization">
+        @foreach (var group in ps.OrderBy(g => g.type))
+        {
+            <div class="task-type-group">
+                <h4>@group.type.Trim()</h4>
+                <table>
+                    @{
+                        var width = @group.cells.Max(c => c.total);
+                        var minSize = @group.cells.Min(c => c.size);
+                        var maxSize = @group.cells.Max(c => c.size);
+                    }
+                    @for (int i = 3; i < minSize; i++)
+                    {
+                        <tr>
+                            <td class="Size">@i</td>
+                            <td class="A" colspan="@width">&nbsp;</td>
+                        </tr>
+                    }
+                    @for (int size = minSize; size <= maxSize; size++)
+                    {
+                        var cell = group.cells.FirstOrDefault(c => c.size == size) ?? new {group.type, size, total=0, solved=0, failed=0};
+                        <tr>
+                            <td class="Size">@size</td>
+                            
+                            @if (cell.solved > 0)
+                            {
+                                <td class="cell S" colspan="@cell.solved">&nbsp;</td>
+                            }
+                            @if (cell.failed > 0)
+                            {
+                                <td class="cell F" colspan="@cell.failed">&nbsp;</td>
+                            }
+                            @if (cell.total-cell.solved-cell.failed > 0)
+                            {
+                                <td class="cell N" colspan="@(cell.total-cell.solved-cell.failed)">&nbsp;</td>
+                            }
+                            @if (width - cell.total > 0)
+                            {
+                                <td class="cell A" colspan="@(width - cell.total)">&nbsp;</td>
+                            }
+                        </tr>
+                    }
+                    <tr>
+                        <th></th>
+                        @for (int i = 0; i < width; i++)
+                        {
+                            <th class="cell">&nbsp;</th>
+                        }
+                    </tr>
+                </table>
+                <div class="subtotal">@group.cells.Sum(c => c.solved) solved</div>
+            </div>
+        }
+    </div>
+    <p>
+        All problems can be divided in 4 classes: simple, with fold operation, with tfold operation (a bit simpler than fold), and bonus problems. 
+        All problems grouped by problem class, expression size, and status — solved (green), failed (red) and not touched (yellow).
+        Here you can analyse the quality of your solver on different expressions.
+    </p>
+
+</div>

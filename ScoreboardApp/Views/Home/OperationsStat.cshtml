@@ -1,0 +1,42 @@
+﻿@using ScoreboardApp.Api
+@model IEnumerable<MyProblemJson>
+@functions {
+    private static IEnumerable<dynamic> CalculateStats(IEnumerable<MyProblemJson> problems)
+    {
+        return
+             problems
+                 .SelectMany(problem => problem.operators.Select(operation => new { problem, operation }))
+                 .GroupBy(
+                     po => po.operation,
+                     (operation, group) =>
+                     {
+                         var g = @group.ToList();
+                         return new
+                             {
+                                 operation,
+                                 failed = 100 * g.Count(p => p.problem.solved == false) / g.Count
+                             };
+                     });
+    }
+}
+
+<table class="table table-condensed">
+
+    @foreach (var o in CalculateStats(Model).OrderByDescending(o => o.failed))
+    {
+        <tr>
+            <td>@o.operation</td>
+            <td>@(o.failed)%</td>
+            <td class="F" colspan="@(o.failed/5)">&nbsp;</td>
+            <td class="S" colspan="@(20 - o.failed/5)">&nbsp;</td>
+        </tr>
+    }
+    <tr>
+        <th></th>
+        <th></th>
+        @for (int i = 0; i < 20; i++)
+        {
+            <th width="5%"></th>
+        }
+    </tr>
+</table>

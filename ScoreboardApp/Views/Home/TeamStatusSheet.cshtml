@@ -1,0 +1,41 @@
+﻿@using ScoreboardApp.Models
+@model TeamViewModel
+
+<div class="span9">
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th>Score</th>
+            <th>@Model.Problems.Count(p => p.solved == true)</th>
+        </tr>
+        @if (!Model.Team.anonymous)
+        {
+            <tr>
+                <td>Lightning Score</td>
+                <td>@Model.Team.lightningScore</td>
+            </tr>
+            <tr>
+                <td>Training Score</td>
+                <td>@Model.Team.trainingScore</td>
+            </tr>
+            <tr>
+                <td>CPU time</td>
+                <td>@Model.Team.cpuTotalTime</td>
+            </tr>
+            <tr>
+                <td># of Requests</td>
+                <td>@Model.Team.numRequests</td>
+            </tr>
+            <tr>
+                <td>Mistmatches</td>
+                <td>@Model.Team.mismatches</td>
+            </tr>
+            if (Model.Team.link != null)
+            {
+            <tr>
+                <td>Details</td>
+                <td><a href="@Model.Team.link">@Model.Team.link</a></td>
+            </tr>
+            }
+        }
+    </table>
+</div>
